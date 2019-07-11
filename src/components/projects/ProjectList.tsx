@@ -1,15 +1,18 @@
 import React from "react";
 import ProjectSummary from "./ProjectSummary";
+import { Project } from "../../store/reducers/projectReducer";
 
-const ProjectList = () => {
+interface Props {
+  projects: ReadonlyArray<Project>;
+}
+
+const ProjectList = (props: Props) => {
   return (
     <div className="project-list section">
-      <ProjectSummary />
-      <ProjectSummary />
-      <ProjectSummary />
-      <ProjectSummary />
-      <ProjectSummary />
-      <ProjectSummary />
+      {props.projects &&
+        props.projects.map(project => {
+          return <ProjectSummary key={project.id} project={project} />;
+        })}
     </div>
   );
 };
