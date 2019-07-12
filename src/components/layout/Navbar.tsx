@@ -7,6 +7,7 @@ import { State } from "../../store/reducers/rootReducer";
 
 interface Props {
   auth: any;
+  profile: any;
 }
 
 const Navbar = (props: Props) => {
@@ -17,7 +18,11 @@ const Navbar = (props: Props) => {
           Mario Plan
         </Link>
         {props.auth.isLoaded &&
-          (props.auth.uid ? <SignedInLinks /> : <SignedOutLinks />)}
+          (props.auth.uid ? (
+            <SignedInLinks profile={props.profile} />
+          ) : (
+            <SignedOutLinks />
+          ))}
       </div>
     </nav>
   );
@@ -25,7 +30,8 @@ const Navbar = (props: Props) => {
 
 const mapStateToProps = (state: State): Props => {
   return {
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    profile: state.firebase.profile
   };
 };
 

@@ -4,11 +4,15 @@ import { connect } from "react-redux";
 import { signOut } from "../../store/actions/authActions";
 import { ThunkDispatch } from "redux-thunk";
 
+interface OwnProps {
+  profile: any;
+}
+
 interface Actions {
   signOut: () => void;
 }
 
-const SignedInLinks = (props: Actions) => {
+const SignedInLinks = (props: OwnProps & Actions) => {
   return (
     <ul className="right">
       <li>
@@ -19,7 +23,7 @@ const SignedInLinks = (props: Actions) => {
       </li>
       <li>
         <NavLink to="/" className="btn btn-floating pink lighten-1">
-          SS
+          {props.profile.initials}
         </NavLink>
       </li>
     </ul>
