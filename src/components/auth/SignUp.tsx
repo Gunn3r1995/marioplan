@@ -74,6 +74,9 @@ class SignUp extends Component<Props & Actions> {
 
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Sign Up</button>
+            <div className="red-text center">
+              {this.props.isError && <p>{this.props.authError}</p>}
+            </div>
           </div>
         </form>
       </div>
