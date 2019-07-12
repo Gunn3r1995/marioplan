@@ -16,6 +16,20 @@ export interface Credentials {
   password: string;
 }
 
+export interface NewUser {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface User {
+  email: string;
+  firstName: string;
+  lastName: string;
+  initials: string;
+}
+
 const authReducer = (state: AuthState = initState, action: AuthActions) => {
   switch (action.type) {
     case "LOGIN_SUCCESS":
@@ -27,13 +41,30 @@ const authReducer = (state: AuthState = initState, action: AuthActions) => {
       };
     case "LOGIN_ERROR":
       state.isError = true;
-      state.authError = "Login Failed";
+      state.authError = action.error.message;
 
       return {
         ...state
       };
     case "SIGNOUT_SUCCESS":
       return state;
+    case "SIGNUP_SUCCESS":
+      console.log("sign up success");
+
+      state.authError = "";
+      state.isError = false;
+
+      return {
+        ...state
+      };
+    case "SIGNUP_ERROR":
+      console.log("sign up error");
+      state.isError = true;
+      state.authError = action.error.message;
+
+      return {
+        ...state
+      };
     default:
       // TODO: LOG
       break;

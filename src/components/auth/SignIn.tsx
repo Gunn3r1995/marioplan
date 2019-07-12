@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { signIn, AuthActions } from "../../store/actions/authActions";
+import { signIn } from "../../store/actions/authActions";
 import { ThunkDispatch } from "redux-thunk";
-import { Credentials, AuthState } from "../../store/reducers/authReducer";
+import { Credentials } from "../../store/reducers/authReducer";
 import { State } from "../../store/reducers/rootReducer";
 import { Redirect } from "react-router-dom";
 

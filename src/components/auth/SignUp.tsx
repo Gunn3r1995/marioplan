@@ -2,15 +2,22 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { State } from "../../store/reducers/rootReducer";
 import { Redirect } from "react-router-dom";
+import { NewUser } from "../../store/reducers/authReducer";
+import { signUp } from "../../store/actions/authActions";
+import { ThunkDispatch } from "redux-thunk";
 
 interface Props {
-  // authError: string;
-  // isError: boolean;
+  authError: string;
+  isError: boolean;
   auth: any;
 }
 
-class SignUp extends Component<Props> {
-  constructor(props: Props) {
+interface Actions {
+  signUp: (newUser: NewUser) => void;
+}
+
+class SignUp extends Component<Props & Actions> {
+  constructor(props: Props & Actions) {
     super(props);
   }
 
@@ -27,6 +34,13 @@ class SignUp extends Component<Props> {
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    this.props.signUp({
+      email: this.state.email,
+      password: this.state.password,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName
+    });
   };
 
   render() {
@@ -69,16 +83,19 @@ class SignUp extends Component<Props> {
 
 const mapStateToProps = (state: State): Props => {
   return {
-    // authError: state.auth.authError,
-    // isError: state.auth.isError,
+    authError: state.auth.authError,
+    isError: state.auth.isError,
     auth: state.firebase.auth
   };
 };
 
-// const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Actions => {
-//   return {
-//     // signIn: (credentials: Credentials) => dispatch(signIn(credentials))
-//   };
-// };
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Actions => {
+  return {
+    signUp: (newUser: NewUser) => dispatch(signUp(newUser))
+  };
+};
 
-export default connect(mapStateToProps)(SignUp);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SignUp);
