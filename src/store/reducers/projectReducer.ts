@@ -17,6 +17,7 @@ export type Project = {
   authorFirstName: string;
   authorLastName: string;
   authorId: string;
+  createdAt: any;
 };
 
 const initState: ProjectState = {

@@ -5,6 +5,7 @@ import { compose } from "redux";
 import { ProjectState, Project } from "../../store/reducers/projectReducer";
 import { State } from "../../store/reducers/rootReducer";
 import { Redirect } from "react-router-dom";
+import moment from "moment";
 
 interface Props {
   project: Project;
@@ -39,7 +40,9 @@ class ProjectDetails extends Component<Props> {
                 Posted by {this.props.project.authorFirstName}{" "}
                 {this.props.project.authorLastName}
               </div>
-              <div>2nd September, 2am</div>
+              <div>
+                {moment(this.props.project.createdAt.toDate()).calendar()}
+              </div>
             </div>
           </div>
         </div>

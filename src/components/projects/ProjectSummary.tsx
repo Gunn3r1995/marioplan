@@ -1,5 +1,6 @@
 import React from "react";
 import { Project } from "../../store/reducers/projectReducer";
+import moment from "moment";
 
 interface Props {
   project: Project;
@@ -14,7 +15,9 @@ const ProjectSummary = (props: Props) => {
           Posted by {props.project.authorFirstName}{" "}
           {props.project.authorLastName}
         </p>
-        <p className="grey-text">3rd September, 2am</p>
+        <p className="grey-text">
+          {moment(props.project.createdAt.toDate()).calendar()}
+        </p>
       </div>
     </div>
   );
