@@ -9,18 +9,21 @@ import { ThunkDispatch } from "redux-thunk";
 export const createProject = (project: ProjectCreate) => {
   return (
     dispatch: ThunkDispatch<{}, {}, AnyAction>,
-    getState: ProjectState,
+    getState: any,
     { getFirestore }: any
   ) => {
     // make async call to database
     const firestore = getFirestore();
+    const profile = getState().firebase.profile;
+    const authorId = getState().firebase.auth.uid;
+
     firestore
       .collection("projects")
       .add({
         ...project,
-        authorFirstName: "Shane",
-        authorLastName: "Smith",
-        authorId: 12345,
+        authorFirstName: profile.firstName,
+        authorLastName: profile.lastName,
+        authorId: authorId,
         createAt: new Date()
       })
       .then(() => {

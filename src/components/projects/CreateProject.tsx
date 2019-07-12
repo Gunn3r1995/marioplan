@@ -8,6 +8,7 @@ import { Redirect } from "react-router-dom";
 
 interface Props {
   auth: any;
+  history: any;
 }
 
 interface Actions {
@@ -37,6 +38,8 @@ class CreateProject extends Component<Props & Actions> {
       ...this.state
     };
     this.props.createProject(project);
+
+    return this.props.history.push("/");
   };
 
   render() {
@@ -72,8 +75,9 @@ class CreateProject extends Component<Props & Actions> {
   }
 }
 
-const mapStateToProps = (state: State): Props => {
+const mapStateToProps = (state: State, ownProps: any): Props => {
   return {
+    ...ownProps,
     auth: state.firebase.auth
   };
 };
