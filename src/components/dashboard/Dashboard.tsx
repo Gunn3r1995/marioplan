@@ -4,17 +4,14 @@ import ProjectList from "../projects/ProjectList";
 import { connect } from "react-redux";
 import { ProjectState, Project } from "../../store/reducers/projectReducer";
 import { State } from "../../store/reducers/rootReducer";
-import { type } from "os";
+import { firestoreConnect } from "react-redux-firebase";
+import { compose } from "redux";
 
 interface Props {
   projects: ReadonlyArray<Project>;
 }
 
-class Dashboard extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-  }
-
+class Dashboard extends Component<Props> {
   render() {
     return (
       <div className="dashboard container">
@@ -31,10 +28,13 @@ class Dashboard extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: any) => {
   return {
-    projects: state.project.projects
+    projects: state.firestore.ordered.projects
   };
 };
 
-export default connect(mapStateToProps)(Dashboard);
+export default compose<any>(
+  firestoreConnect(["projects"]),
+  connect(mapStateToProps)
+)(Dashboard);
