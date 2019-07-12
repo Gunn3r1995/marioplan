@@ -1,13 +1,16 @@
-import { Project, ProjectState } from "../reducers/projectReducer";
-import { State } from "../reducers/rootReducer";
+import {
+  Project,
+  ProjectState,
+  ProjectCreate
+} from "../reducers/projectReducer";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 
-export const createProject = (project: Project) => {
+export const createProject = (project: ProjectCreate) => {
   return (
     dispatch: ThunkDispatch<{}, {}, AnyAction>,
     getState: ProjectState,
-    { getFirebase, getFirestore }: any
+    { getFirestore }: any
   ) => {
     // make async call to database
     const firestore = getFirestore();

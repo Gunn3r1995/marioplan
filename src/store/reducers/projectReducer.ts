@@ -5,18 +5,22 @@ export interface ProjectState {
   projects: ReadonlyArray<Project>;
 }
 
-export type Project = {
-  id?: string;
+export type ProjectCreate = {
   title: string;
   content: string;
 };
 
-const initState = {
-  projects: [
-    { id: "1", title: "help me find peach", content: "blah blah blah" },
-    { id: "2", title: "collect all the stars", content: "blah blah blah" },
-    { id: "3", title: "egg hunt with yoshi", content: "blah blah blah" }
-  ]
+export type Project = {
+  id: string;
+  title: string;
+  content: string;
+  authorFirstName: string;
+  authorLastName: string;
+  authorId: string;
+};
+
+const initState: ProjectState = {
+  projects: []
 };
 
 const projectReducer = (

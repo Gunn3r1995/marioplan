@@ -1,13 +1,11 @@
 import React, { Component, Dispatch } from "react";
 import { connect } from "react-redux";
 import { createProject } from "../../store/actions/projectActions";
-import { Action } from "history";
-import { Project } from "../../store/reducers/projectReducer";
+import { Project, ProjectCreate } from "../../store/reducers/projectReducer";
 import { ThunkDispatch } from "redux-thunk";
-import { AnyAction } from "redux";
 
 interface Actions {
-  createProject: (project: Project) => void;
+  createProject: (project: ProjectCreate) => void;
 }
 
 class CreateProject extends Component<Actions> {
@@ -15,7 +13,7 @@ class CreateProject extends Component<Actions> {
     super(props);
   }
 
-  state = {
+  state: ProjectCreate = {
     title: "",
     content: ""
   };
@@ -29,7 +27,7 @@ class CreateProject extends Component<Actions> {
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const project: Project = {
+    const project: ProjectCreate = {
       ...this.state
     };
     this.props.createProject(project);
@@ -67,7 +65,7 @@ class CreateProject extends Component<Actions> {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Actions => {
   return {
-    createProject: (project: Project) => dispatch(createProject(project))
+    createProject: (project: ProjectCreate) => dispatch(createProject(project))
   };
 };
 
