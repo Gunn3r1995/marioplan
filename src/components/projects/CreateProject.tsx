@@ -1,6 +1,20 @@
-import React, { Component } from "react";
+import React, { Component, Dispatch } from "react";
+import { connect } from "react-redux";
+import { createProject } from "../../store/actions/projectActions";
+import { Action } from "history";
+import { Project } from "../../store/reducers/projectReducer";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
 
-class CreateProject extends Component {
+interface Actions {
+  createProject: (project: Project) => void;
+}
+
+class CreateProject extends Component<Actions> {
+  constructor(props: Actions) {
+    super(props);
+  }
+
   state = {
     title: "",
     content: ""
@@ -14,6 +28,11 @@ class CreateProject extends Component {
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const project: Project = {
+      ...this.state
+    };
+    this.props.createProject(project);
 
     console.log(this.state);
   };
@@ -46,4 +65,13 @@ class CreateProject extends Component {
   }
 }
 
-export default CreateProject;
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Actions => {
+  return {
+    createProject: (project: Project) => dispatch(createProject(project))
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(CreateProject);

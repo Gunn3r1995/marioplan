@@ -16,7 +16,6 @@ class Dashboard extends React.Component<Props> {
   }
 
   render() {
-    console.log(this.props.projects);
     return (
       <div className="dashboard container">
         <div className="row">

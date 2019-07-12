@@ -11,7 +11,7 @@ const ProjectList = (props: Props) => {
     <div className="project-list section">
       {props.projects &&
         props.projects.map(project => {
-          return <ProjectSummary key={project.id} project={project} />;
+          return <ProjectSummary key={1} project={project} />;
         })}
     </div>
   );
