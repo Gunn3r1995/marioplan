@@ -1,15 +1,21 @@
 import React, { Component, Dispatch } from "react";
 import { connect } from "react-redux";
 import { createProject } from "../../store/actions/projectActions";
-import { Project, ProjectCreate } from "../../store/reducers/projectReducer";
+import { ProjectCreate } from "../../store/reducers/projectReducer";
 import { ThunkDispatch } from "redux-thunk";
+import { State } from "../../store/reducers/rootReducer";
+import { Redirect } from "react-router-dom";
+
+interface Props {
+  auth: any;
+}
 
 interface Actions {
   createProject: (project: ProjectCreate) => void;
 }
 
-class CreateProject extends Component<Actions> {
-  constructor(props: Actions) {
+class CreateProject extends Component<Props & Actions> {
+  constructor(props: Props & Actions) {
     super(props);
   }
 
@@ -31,11 +37,14 @@ class CreateProject extends Component<Actions> {
       ...this.state
     };
     this.props.createProject(project);
-
-    console.log(this.state);
   };
 
   render() {
+    // Authentication Check
+    if (!this.props.auth.uid) {
+      return <Redirect to="/signin" />;
+    }
+
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -63,6 +72,12 @@ class CreateProject extends Component<Actions> {
   }
 }
 
+const mapStateToProps = (state: State): Props => {
+  return {
+    auth: state.firebase.auth
+  };
+};
+
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Actions => {
   return {
     createProject: (project: ProjectCreate) => dispatch(createProject(project))
@@ -70,6 +85,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Actions => {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(CreateProject);

@@ -3,9 +3,16 @@ import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import { ProjectState, Project } from "../../store/reducers/projectReducer";
+import { State } from "../../store/reducers/rootReducer";
+import { Redirect } from "react-router-dom";
 
 interface Props {
   project: Project;
+  auth: any;
+}
+
+interface OwnProps {
+  match: { params: { id: number } };
 }
 
 class ProjectDetails extends Component<Props> {
@@ -14,6 +21,11 @@ class ProjectDetails extends Component<Props> {
   }
 
   render() {
+    // Authentication Check
+    if (!this.props.auth.uid) {
+      return <Redirect to="/signin" />;
+    }
+
     if (this.props.project != null) {
       return (
         <div className="container section project-details">
@@ -42,14 +54,14 @@ class ProjectDetails extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => {
+const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
   const id = ownProps.match.params.id;
   const projects = state.firestore.data.projects;
   const project = projects ? projects[id] : null;
 
-  console.log(projects);
   return {
-    project: project
+    project: project,
+    auth: state.firebase.auth
   };
 };
 

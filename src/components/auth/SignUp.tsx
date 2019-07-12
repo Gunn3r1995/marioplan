@@ -1,6 +1,19 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { State } from "../../store/reducers/rootReducer";
+import { Redirect } from "react-router-dom";
 
-class SignUp extends Component {
+interface Props {
+  // authError: string;
+  // isError: boolean;
+  auth: any;
+}
+
+class SignUp extends Component<Props> {
+  constructor(props: Props) {
+    super(props);
+  }
+
   state = {
     email: "",
     password: "",
@@ -14,10 +27,13 @@ class SignUp extends Component {
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(this.state);
   };
 
   render() {
+    if (this.props.auth.uid) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -51,4 +67,18 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+const mapStateToProps = (state: State): Props => {
+  return {
+    // authError: state.auth.authError,
+    // isError: state.auth.isError,
+    auth: state.firebase.auth
+  };
+};
+
+// const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Actions => {
+//   return {
+//     // signIn: (credentials: Credentials) => dispatch(signIn(credentials))
+//   };
+// };
+
+export default connect(mapStateToProps)(SignUp);

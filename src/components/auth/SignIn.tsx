@@ -1,22 +1,55 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { signIn, AuthActions } from "../../store/actions/authActions";
+import { ThunkDispatch } from "redux-thunk";
+import { Credentials, AuthState } from "../../store/reducers/authReducer";
+import { State } from "../../store/reducers/rootReducer";
+import { Redirect } from "react-router-dom";
 
-class SignIn extends Component {
-  state = {
-    email: "",
-    password: ""
-  };
+interface Props {
+  authError: string;
+  isError: boolean;
+  auth: any;
+}
+
+interface Actions {
+  signIn: (credentials: Credentials) => void;
+}
+
+interface OwnState {
+  email: string;
+  password: string;
+}
+
+class SignIn extends Component<Props & Actions, OwnState> {
+  constructor(props: Props & Actions, state: OwnState) {
+    super(props, state);
+  }
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ [e.target.id]: e.target.value });
+    if (e.target.id === "email") {
+      this.setState({
+        email: e.target.value
+      });
+    }
+
+    if (e.target.id === "password") {
+      this.setState({
+        password: e.target.value
+      });
+    }
   };
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(this.state);
+    this.props.signIn({ ...this.state });
   };
 
   render() {
+    if (this.props.auth.uid) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -33,6 +66,9 @@ class SignIn extends Component {
 
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Login</button>
+            <div className="red-text center">
+              {this.props.isError && <p>{this.props.authError}</p>}
+            </div>
           </div>
         </form>
       </div>
@@ -40,4 +76,21 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn;
+const mapStateToProps = (state: State): Props => {
+  return {
+    authError: state.auth.authError,
+    isError: state.auth.isError,
+    auth: state.firebase.auth
+  };
+};
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Actions => {
+  return {
+    signIn: (credentials: Credentials) => dispatch(signIn(credentials))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SignIn);
