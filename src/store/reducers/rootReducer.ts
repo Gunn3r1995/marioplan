@@ -11,6 +11,13 @@ export interface State {
   firebase: any;
 }
 
+export interface Notification {
+  id: string;
+  content: string;
+  user: string;
+  time: any;
+}
+
 const rootReducer = combineReducers({
   auth: authReducer,
   project: projectReducer,

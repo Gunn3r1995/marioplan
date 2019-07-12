@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import Notifications from "./Notifications";
 import ProjectList from "../projects/ProjectList";
 import { connect } from "react-redux";
 import { ProjectState, Project } from "../../store/reducers/projectReducer";
-import { State } from "../../store/reducers/rootReducer";
+import { State, Notification } from "../../store/reducers/rootReducer";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
-import { auth } from "firebase";
 import { Redirect } from "react-router-dom";
+import Notifications from "./Notifications";
 
 interface Props {
   projects: ReadonlyArray<Project>;
+  notifications: ReadonlyArray<Notification>;
   auth: any;
 }
 
@@ -28,7 +28,7 @@ class Dashboard extends Component<Props> {
             <ProjectList projects={this.props.projects} />
           </div>
           <div className="col s12 m5 offset-m1">
-            <Notifications />
+            <Notifications notifications={this.props.notifications} />
           </div>
         </div>
       </div>
@@ -40,11 +40,15 @@ const mapStateToProps = (state: State): Props => {
   console.log(state);
   return {
     projects: state.firestore.ordered.projects,
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    notifications: state.firestore.ordered.notifications
   };
 };
 
 export default compose<any>(
-  firestoreConnect(["projects"]),
+  firestoreConnect([
+    { collection: "projects" },
+    { collection: "notifications", limit: 3 }
+  ]),
   connect(mapStateToProps)
 )(Dashboard);
